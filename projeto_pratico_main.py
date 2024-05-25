@@ -59,7 +59,7 @@ def menu_Principal():
     # chama função que contém loop de repetição com 5 opções
     return loopEscolhas(5)
 
-#=================================================================================
+#---------------------------------------------------------------------------------------------
 def submenu_Medicina():
     print()
     print("========================================")
@@ -75,7 +75,7 @@ def submenu_Medicina():
     # chama função que contém loop de repetição com 7 opções    
     return loopEscolhas(7)
 
-#=========================================================================================
+#---------------------------------------------------------------------------------------------
 def submenu_Pacientes():
     print()
     print("=========================================")
@@ -83,7 +83,7 @@ def submenu_Pacientes():
     print("1.Mostrar todos;")
     print("2.Pesquisar paciente;")
     print("3.Adicionar paciente;")
-    print("4.Alterar cadastro de profissional;")
+    print("4.Alterar cadastro de paciente;")
     print("5.Excluir cadastro de paciente;")
     print("6.Retornar ao Menu Principal;")
     print("7.Encerrar.")
@@ -96,8 +96,44 @@ def submenu_Consultas():
 def submenu_Relatorios():
     return "========================================\nRELATÓRIOS"
 
+#### Funções =================================================================================
+
+# Recebe o dicionário Banco e 'escolha' vem como "Medicina", "Pacientes" ou "Consulta" dependendo de qual menu foi selecionado
+def mostrar_todos(banco, escolha):
+    if escolha == "Medicina":
+        print()
+        print("************ Profissionais de Medicina *************")
+
+        # Para cada elemento em banco[escolha] (Neste caso é o dict Medicina dentro de Banco)
+        for elem in banco[escolha]:
+            print(f"CRM: {elem}")
+            print(f"Nome: {banco[escolha][elem][0]}")
+            print(f"Data de nascimento: {banco[escolha][elem][1]}")
+            print(f"Sexo: {banco[escolha][elem][2]}")
+            print(f"Especialidade: {banco[escolha][elem][3]}")
+            print(f"Formação: {banco[escolha][elem][4]}")
+            print("E-mails:")
+            for email in banco[escolha][elem][5]:
+                print(f"\t- {email}")
+            print("Telefones: ")
+            for telefone in banco[escolha][elem][6]:
+                print(f"\t- {telefone}")
+            print("----------------------------------------------------")
+    elif escolha == "Pacientes":
+        print()
+        print("******************** Pacientes *********************")
+        
+    elif escolha == "Consultas":
+        print()
+        print("Mostrando todas as consultas: ")
+
+#---------------------------------------------------------------------------------------------
+
+    
+
 #### Main ====================================================================================
 def main():
+    Banco = {"Medicina":{"CRM001":["Pedro de Paula", "12/12/1995", "Masculino", "Cardiologista", "UFSCar", ["pedro@gmail.com", "drpedro@unimed.com"], ["(16)99999-9999", "(16)3333-3333"]], "CRM002":["Ana Clara Souza", "06/06/2000", "Feminino", "Pneumologista", "USP", ["clara@santacasa.com"], ["(11)9999-9999", "(11)9999-8888", "(11)4444-4444"]]}, "Pacientes":{}, "Consultas":{}}
     # Inicializa opt em 1 para entrar no loop
     # receberá novo valor de menuPrincipal()
     opt = 1
@@ -109,9 +145,10 @@ def main():
             # enquanto subopt não indicar retorno ao menu principal(6) ou encerrar(7), repete o submenu de medicina
             while subopt!=6 and subopt!=7:
                 subopt = submenu_Medicina()
+
                 # condições para acessar funções específicas
                 if subopt == 1:
-                    print("1. Mostrar todos;") # TESTE
+                    mostrar_todos(Banco, "Medicina") # FUNCIONANDO
                 elif subopt == 2:
                     print("2. Pesquisar profissional;") # TESTE
                 elif subopt == 3:
@@ -125,14 +162,17 @@ def main():
                 elif subopt == 7:
                     msg_Encerrado()
                     opt = 5
-         #Após selecionar a opção 2 inicializa o bloco de comandos.           
+
+        #Após selecionar a opção 2 inicializa o bloco de comandos.           
         elif opt == 2:
+
             #Enquanto subopt for diferente de 6(menu principal) e 7(encerrar), o submenu de pacientes se repete 
             while subopt!=6 and subopt!=7:
                 subopt=submenu_Pacientes()
+
                 #condições para acessar determinadas funções
                 if subopt==1:
-                     print("1. Mostrar todos;") # TESTE
+                    print("1. Mostrar todos;") # TESTE
                 elif subopt == 2:
                     print("2. Pesquisar paciente;") # TESTE
                 elif subopt == 3:
