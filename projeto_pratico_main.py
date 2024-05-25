@@ -188,7 +188,7 @@ def main():
 
                 #condições para acessar determinadas funções
                 if subopt==1:
-                    mostrar_todos(Banco, "Pacientes") # TESTE
+                    mostrar_todos(Banco, "Pacientes") # FUNCIONANDO
                 elif subopt == 2:
                     print("2. Pesquisar paciente;") # TESTE
                 elif subopt == 3:
