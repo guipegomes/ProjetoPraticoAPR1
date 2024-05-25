@@ -123,6 +123,13 @@ def mostrar_todos(banco, escolha):
         print()
         print("******************** Pacientes *********************")
         
+        #Para cada elemento em banco[escolha] (Neste caso é o dict Pacientes dentro de Banco)
+        
+        for elem in banco[escolha]:
+            print(f"CPF:{elem}")
+            print(f"Nome:{banco[escolha][elem][0]}")
+            print(f"Data de nascimento:{banco[escolha][elem][1]}")
+        
     elif escolha == "Consultas":
         print()
         print("Mostrando todas as consultas: ")
