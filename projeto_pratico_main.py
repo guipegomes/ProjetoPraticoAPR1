@@ -104,24 +104,15 @@ def mostrar_todos(banco, escolha):
         print()
         print("************ Profissionais de Medicina *************")
 
-        # Para cada elemento em banco[escolha] (Neste caso é o dict Medicina dentro de Banco)
-        for elem in banco[escolha]:
-            print(f"CRM: {elem}")
-            print(f"Nome: {banco[escolha][elem][0]}")
-            print(f"Data de nascimento: {banco[escolha][elem][1]}")
-            print(f"Sexo: {banco[escolha][elem][2]}")
-            print(f"Especialidade: {banco[escolha][elem][3]}")
-            print(f"Formação: {banco[escolha][elem][4]}")
-            print("E-mails:")
-            for email in banco[escolha][elem][5]:
-                print(f"\t- {email}")
-            print("Telefones: ")
-            for telefone in banco[escolha][elem][6]:
-                print(f"\t- {telefone}")
+        # Para cada elemento em banco[escolha] chama a função de pesquisar 1
+        for crm in banco[escolha]:
+            pesquisar_profissional(banco, crm) 
             print("----------------------------------------------------")
+
     elif escolha == "Pacientes":
         print()
         print("******************** Pacientes *********************")
+
         
     elif escolha == "Consultas":
         print()
@@ -129,7 +120,27 @@ def mostrar_todos(banco, escolha):
 
 #---------------------------------------------------------------------------------------------
 
-    
+def pesquisar_profissional(banco, crm):
+    medicina = banco["Medicina"] #coloquei em uma variável pra ficar mais fácil para escrever o código
+    if crm in medicina:
+        print(f"CRM: {crm}")
+        print(f"Nome: {medicina[crm][0]}")
+        print(f"Data de nascimento: {medicina[crm][1]}")
+        print(f"Sexo: {medicina[crm][2]}")
+        print(f"Especialidade: {medicina[crm][3]}")
+        print(f"Formação: {medicina[crm][4]}")
+        print("E-mails:")
+        for email in medicina[crm][5]:
+            print(f"\t- {email}")
+        print("Telefones: ")
+        for telefone in medicina[crm][6]:
+            print(f"\t- {telefone}")
+    else:
+        print("Profissional não encontrado. Verifique o CRM e tente novamente")
+
+def pesquisar_paciente(banco, cpf):
+    # Aqui vc pode fazer igual o código de cima
+    print("Print só pra ter alguma coisa aqui dentro") # pode apagar
 
 #### Main ====================================================================================
 def main():
@@ -150,7 +161,10 @@ def main():
                 if subopt == 1:
                     mostrar_todos(Banco, "Medicina") # FUNCIONANDO
                 elif subopt == 2:
-                    print("2. Pesquisar profissional;") # TESTE
+                    crm = input("Digite o CRM do profissional: ")
+                    print()
+                    print("********** Mostrando profissionais de medicina ********** ")
+                    pesquisar_profissional(Banco, crm)
                 elif subopt == 3:
                     print("3. Adicionar profissional;") # TESTE
                 elif subopt == 4:
