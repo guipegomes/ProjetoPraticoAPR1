@@ -114,6 +114,22 @@ def mostrar_todos(banco, escolha):
         print("******************** Pacientes *********************")
 
         
+        #Para cada elemento em banco[escolha] (Neste caso é o dict Pacientes dentro de Banco)
+        
+        for elem in banco[escolha]:
+            print(f"CPF:{elem}")
+            print(f"Nome:{banco[escolha][elem][0]}")
+            print(f"Data de nascimento:{banco[escolha][elem][1]}")
+            print(f"Sexo:{banco[escolha][elem][2]}")
+            print(f"Plano de Saúde:{banco[escolha][elem][3]}")
+            print(f"Emails:")
+            for email in banco [escolha][elem][4]:
+                print(f"\t- {email}")
+            print("Telefones:")
+            for telefone in banco[escolha][elem][5]:
+                print(f"\t- {telefone}")
+            print("----------------------------------------------------")
+        
     elif escolha == "Consultas":
         print()
         print("Mostrando todas as consultas: ")
@@ -144,7 +160,7 @@ def pesquisar_paciente(banco, cpf):
 
 #### Main ====================================================================================
 def main():
-    Banco = {"Medicina":{"CRM001":["Pedro de Paula", "12/12/1995", "Masculino", "Cardiologista", "UFSCar", ["pedro@gmail.com", "drpedro@unimed.com"], ["(16)99999-9999", "(16)3333-3333"]], "CRM002":["Ana Clara Souza", "06/06/2000", "Feminino", "Pneumologista", "USP", ["clara@santacasa.com"], ["(11)9999-9999", "(11)9999-8888", "(11)4444-4444"]]}, "Pacientes":{}, "Consultas":{}}
+    Banco = {"Medicina":{"CRM001":["Pedro de Paula", "12/12/1995", "Masculino", "Cardiologista", "UFSCar", ["pedro@gmail.com", "drpedro@unimed.com"], ["(16)99999-9999", "(16)3333-3333"]], "CRM002":["Ana Clara Souza", "06/06/2000", "Feminino", "Pneumologista", "USP", ["clara@santacasa.com"], ["(11)9999-9999", "(11)9999-8888", "(11)4444-4444"]]}, "Pacientes":{"CPF1":["Alex Nunes","27/05/1998","Masculino","Unimed",["alex@gmail.com"],["(16) 5555-5555"]],"CPF2":["Elen Maria Da Silva","06/06/1955","Feminino","SUS",["elen@gmail.com"],["(14)1234-9876"]]}, "Consultas":{}}
     # Inicializa opt em 1 para entrar no loop
     # receberá novo valor de menuPrincipal()
     opt = 1
@@ -186,7 +202,7 @@ def main():
 
                 #condições para acessar determinadas funções
                 if subopt==1:
-                    print("1. Mostrar todos;") # TESTE
+                    mostrar_todos(Banco, "Pacientes") # FUNCIONANDO
                 elif subopt == 2:
                     print("2. Pesquisar paciente;") # TESTE
                 elif subopt == 3:
