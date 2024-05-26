@@ -158,18 +158,18 @@ def pesquisar_profissional(banco, crm):
         print("Profissional não encontrado. Verifique o CRM e tente novamente")
 
 def pesquisar_paciente(banco, cpf):
-    paciente=banco["Pacientes"]
+    paciente = banco["Pacientes"]
     if cpf in paciente:
         print(f"CPF:{cpf}")
-        print(f"Nome:{banco[paciente][cpf][0]}")
-        print(f"Data de nascimento:{banco[paciente][cpf][1]}")
-        print(f"Sexo:{banco[paciente][cpf][2]}")
-        print(f"Plano de Saúde:{banco[paciente][cpf][3]}")
+        print(f"Nome:{paciente[cpf][0]}")
+        print(f"Data de nascimento:{paciente[cpf][1]}")
+        print(f"Sexo:{paciente[cpf][2]}")
+        print(f"Plano de Saúde:{paciente[cpf][3]}")
         print(f"Emails:")
-        for email in banco [paciente][cpf][4]:
+        for email in paciente[cpf][4]:
                 print(f"\t- {email}")
         print("Telefones:")
-        for telefone in banco[paciente][cpf][5]:
+        for telefone in paciente[cpf][5]:
                 print(f"\t- {telefone}")
     else:
         print("Paciente não encontrado. Verifique o CPF e tente novamente")
@@ -222,7 +222,10 @@ def main():
                 if subopt==1:
                     mostrar_todos(Banco, "Pacientes") # FUNCIONANDO
                 elif subopt == 2:
-                    print("2. Pesquisar paciente;") # TESTE
+                    cpf=input("Digite o CPF do paciente:")
+                    print()
+                    print("********** Mostrando o paciente ********** ") # FUNCIONANDO
+                    pesquisar_paciente(Banco,cpf)
                 elif subopt == 3:
                     print("3. Adicionar paciente;") # TESTE
                 elif subopt == 4:
