@@ -112,6 +112,11 @@ def mostrar_todos(banco, escolha):
     elif escolha == "Pacientes":
         print()
         print("******************** Pacientes *********************")
+        
+        #Para cada elemento em banco[escolha] chama a função de pesquisar 
+        for cpf in banco[escolha]:
+            pesquisar_paciente(banco,cpf)
+            print("----------------------------------------------------")
 
         #Para cada elemento em banco[escolha] (Neste caso é o dict Pacientes dentro de Banco)
         for elem in banco[escolha]:
@@ -153,9 +158,24 @@ def pesquisar_profissional(banco, crm):
         print("Profissional não encontrado. Verifique o CRM e tente novamente")
 
 def pesquisar_paciente(banco, cpf):
-    # Aqui vc pode fazer igual o código de cima
-    print("Print só pra ter alguma coisa aqui dentro") # pode apagar
-
+    paciente=banco["Pacientes"]
+    if cpf in paciente:
+        print(f"CPF:{cpf}")
+        print(f"Nome:{banco[paciente][cpf][0]}")
+        print(f"Data de nascimento:{banco[paciente][cpf][1]}")
+        print(f"Sexo:{banco[paciente][cpf][2]}")
+        print(f"Plano de Saúde:{banco[paciente][cpf][3]}")
+        print(f"Emails:")
+        for email in banco [paciente][cpf][4]:
+                print(f"\t- {email}")
+        print("Telefones:")
+        for telefone in banco[paciente][cpf][5]:
+                print(f"\t- {telefone}")
+    else:
+        print("Paciente não encontrado. Verifique o CPF e tente novamente")
+        
+    
+    
 #### Main ====================================================================================
 def main():
     Banco = {"Medicina":{"CRM001":["Pedro de Paula", "12/12/1995", "Masculino", "Cardiologista", "UFSCar", ["pedro@gmail.com", "drpedro@unimed.com"], ["(16)99999-9999", "(16)3333-3333"]], "CRM002":["Ana Clara Souza", "06/06/2000", "Feminino", "Pneumologista", "USP", ["clara@santacasa.com"], ["(11)9999-9999", "(11)9999-8888", "(11)4444-4444"]]}, "Pacientes":{"CPF1":["Alex Nunes","27/05/1998","Masculino","Unimed",["alex@gmail.com"],["(16) 5555-5555"]],"CPF2":["Elen Maria Da Silva","06/06/1955","Feminino","SUS",["elen@gmail.com"],["(14)1234-9876"]]}, "Consultas":{}}
