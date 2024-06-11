@@ -227,18 +227,35 @@ def adicionar_profissional(banco):
         return True
 
 #---------------------------------------------------------------------------------------------
-def adicionar_paciente(banco): #fiz a minha de adicionar_profissional baseada na que vc fez dá uma olhada lá
-    '''
-    add_paciente.append(cpf,nome,nascimento,sexo,plano_de_saude,emails,telefone)
+def adicionar_paciente(banco): 
+    
+    # inicializa listas que serão usadas
+    paciente = []
+    emails = []
+    telefones = []
+    
+    cpf = input("Digite o CPF do paciente:")
+    
+    # verifica se já está cadastrado e retorna falso caso esteja
+    if cpf in banco["Pacientes"]: 
+        return False
+    else:
+        
+        paciente.append(input("Digite o nome: "))
+        paciente.append(input("Digite a data de nascimento (Formato: DD/MM/AAAA): "))
+        paciente.append(input("Digite o sexo (Masculino, Feminino ou Não-binário: "))
+        paciente.append(input("Digite o Plano de Saúde (Ex: Unimed): "))
+        
+       
+        adicionar_email_telefone(emails, "email") 
+        paciente.append(emails) 
+        adicionar_email_telefone(telefones, "telefone")
+        paciente.append(telefones) 
 
-    Essa parte do código que vc tinha feito não dá certo, porque .append() só aceita 1 argumento de cada vez, então o certo seria
-    add_paciente.append(cpf)
-    add_paciente.append(nome)
-    etc...
-
-    por isso alterei lá na função adicionar_profissional, e já fui fazendo append direto
-    '''
-
+        # Passa para o CPF certo as informações do paciente criado aqui
+        banco["Pacientes"][cpf] = paciente 
+        return True
+        
 #---------------------------------------------------------------------------------------------
 
 # Função de alteração dos dados cadastrados
@@ -523,7 +540,16 @@ def main():
                         print("----------------------------------------------------------")
 
                 elif subopt == 3:
-                    print("3. Adicionar paciente;") # TESTE
+                    print(f"\n*************** Adicionando paciente ****************")
+                    if adicionar_paciente(Banco): 
+                        print(f"\n------------------------------------")
+                        print("Paciente adicionado com sucesso!")
+                        print("------------------------------------")
+                    else:
+                        print(f"\n---------------------------------------")
+                        print("Já existe um paciente com este CPF.")
+                        print("---------------------------------------")
+                        
                 elif subopt == 4:
                     print("4. Alterar cadastro do paciente;") # TESTE
                 elif subopt == 5:
