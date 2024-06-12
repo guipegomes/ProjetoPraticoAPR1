@@ -1,10 +1,7 @@
 ##############################################################################################
 #### Repetições ==============================================================================
 ##############################################################################################
-'''
-Loops em funções para não ter muita repetição de código
-'''
-def loopEscolhas(max): # max é o número de escolhas dos menus
+def loop_escolhas(max): # max é o número de escolhas dos menus
     # inicializa variável loop como condição na repetição while
     loop = True
     while loop: 
@@ -13,25 +10,22 @@ def loopEscolhas(max): # max é o número de escolhas dos menus
         # verifica se a entrada é um digito e então faz a conversão para int se verdadeiro
         # dessa maneira garante que não ocorrerá erro ao converter logo no input
         if entrada.isdigit(): 
-            opt = int(entrada)
+            opcao = int(entrada)
 
             # condição para sair do loop
-            if opt>=1 and opt<=max: 
+            if opcao>=1 and opcao<=max: 
                 loop = False 
             
         # chama função com mensagem de opção inválida caso não cumpra condições
             else:
-                msg_Invalida(max) 
+                msg_invalida(max) 
         else: 
-            msg_Invalida(max)
-    return opt
+            msg_invalida(max)
+    return opcao
 
 #---------------------------------------------------------------------------------------------
-'''
-Função criada para evitar repetição de código ao adicionar telefones e emails para profissionais e pacientes
-'''
 # @lista é uma lista de e-mails ou telefones criada anteriormente, e @escolha vem como string "email" OU "telefone" para entrar na condição certa
-def adicionar_email_telefone(lista, escolha): 
+def adicionar_email_ou_telefone(lista, escolha): 
     if escolha == "email":
         email = "0"
         print("Iniciada repetição para adicionar e-mails.")
@@ -65,14 +59,14 @@ def adicionar_email_telefone(lista, escolha):
 Utilizada quando há erro de escolha do usuário
 Recebe max, que é o número máximo de escolhas do menu
 '''
-def msg_Invalida(max):
+def msg_invalida(max):
     print()
     print("-----------------------------------------------------------")
     print(f"Atenção! Opção inválida. Digite apenas números entre 1 e {max}.")
     print("-----------------------------------------------------------")
     print()
 #---------------------------------------------------------------------------------------------
-def msg_Encerrado():
+def msg_encerrado():
     print()
     print("========================================")
     print("Programa encerrado.")
@@ -81,7 +75,7 @@ def msg_Encerrado():
 ##############################################################################################
 ##### Menus ==================================================================================
 ##############################################################################################
-def menu_Principal():
+def menu_principal():
     print()
     print("==================== Menu principal ====================")
     print("1. Profissionais de Medicina;")
@@ -91,10 +85,10 @@ def menu_Principal():
     print("5. Encerrar;")
 
     # chama função que contém loop de repetição com 5 opções
-    return loopEscolhas(5)
+    return loop_escolhas(5)
 
 #---------------------------------------------------------------------------------------------
-def submenu_Medicina():
+def submenu_medicina():
     print()
     print("========== Menu de Profissionais de Medicina ===========")
     print("1. Mostrar todos;")
@@ -106,10 +100,10 @@ def submenu_Medicina():
     print("7. Encerrar.")
 
     # chama função que contém loop de repetição com 7 opções    
-    return loopEscolhas(7)
+    return loop_escolhas(7)
 
 #---------------------------------------------------------------------------------------------
-def submenu_Pacientes():
+def submenu_pacientes():
     print()
     print("================== Menu de Pacientes ===================")
     print("1. Mostrar todos;")
@@ -120,18 +114,18 @@ def submenu_Pacientes():
     print("6. Retornar ao Menu Principal;")
     print("7. Encerrar.")
     
-    return loopEscolhas(7)
+    return loop_escolhas(7)
 
 #---------------------------------------------------------------------------------------------
-def submenu_Consultas():
+def submenu_consultas():
     return "========================================\nCONSULTAS"
 
 #---------------------------------------------------------------------------------------------
-def submenu_Relatorios():
+def submenu_relatorios():
     return "========================================\nRELATÓRIOS"
 
 ##############################################################################################
-#### Funções =================================================================================
+#### Funções Específicas =====================================================================
 ##############################################################################################
 
 # Recebe o dicionário Banco e 'escolha' vem como "Medicina", "Pacientes" ou "Consulta" dependendo de qual menu foi selecionado
@@ -140,7 +134,7 @@ def mostrar_todos(banco, escolha):
 
         # Para cada elemento em banco[escolha] chama a função de pesquisar 1
         for crm in banco[escolha]:
-            pesquisar_profissional(banco, crm) 
+            pesquisar_profissional_medicina(banco, crm) 
             print("----------------------------------------------------")
 
     elif escolha == "Pacientes":
@@ -155,7 +149,7 @@ def mostrar_todos(banco, escolha):
         print("Mostrando todas as consultas: ")
 
 #---------------------------------------------------------------------------------------------
-def pesquisar_profissional(banco, crm):
+def pesquisar_profissional_medicina(banco, crm):
     medicina = banco["Medicina"] 
     if crm in medicina:
         print(f"CRM: {crm}")
@@ -200,7 +194,7 @@ def pesquisar_paciente(banco, cpf):
         return False
 
 #---------------------------------------------------------------------------------------------
-def adicionar_profissional(banco):
+def adicionar_profissional_medicina(banco):
 
     # inicializa listas que serão usadas
     profissional = []
@@ -222,9 +216,9 @@ def adicionar_profissional(banco):
         profissional.append(input("Digite a universidade de formação (Ex: UFSCar): "))
 
         # função que adiciona e-mail ou telefone. Tá lá em cima no código, nas repetições
-        adicionar_email_telefone(emails, "email") 
+        adicionar_email_ou_telefone(emails, "email") 
         profissional.append(emails) 
-        adicionar_email_telefone(telefones, "telefone")
+        adicionar_email_ou_telefone(telefones, "telefone")
         profissional.append(telefones) 
 
         # Passa para o CRM certo as informações do profissional criado aqui
@@ -251,9 +245,9 @@ def adicionar_paciente(banco):
         paciente.append(input("Digite o sexo (Masculino, Feminino ou Não-binário): "))
         paciente.append(input("Digite o Plano de Saúde (Ex: Unimed): "))
         
-        adicionar_email_telefone(emails, "email") 
+        adicionar_email_ou_telefone(emails, "email") 
         paciente.append(emails) 
-        adicionar_email_telefone(telefones, "telefone")
+        adicionar_email_ou_telefone(telefones, "telefone")
         paciente.append(telefones) 
 
         # Passa para o CPF certo as informações do paciente criado aqui
@@ -263,7 +257,7 @@ def adicionar_paciente(banco):
 #---------------------------------------------------------------------------------------------
 
 # Função de alteração dos dados cadastrados
-def alterar_profissional(banco): 
+def alterar_profissional_medicina(banco): 
     crm = input("Digite o CRM: ")
 
     # Verifica se está ou não cadastrado, se não estiver já retorna false
@@ -274,7 +268,7 @@ def alterar_profissional(banco):
         print("------------ Informações atuais ------------" )
 
         # Usei a função de pesquisar, que imprime os dados para mostrar ao usuário quais dados estão cadastrados pelo CRM informado
-        pesquisar_profissional(banco, crm) 
+        pesquisar_profissional_medicina(banco, crm) 
 
         print("*************** Alteração dos dados ***************")
         
@@ -441,7 +435,7 @@ def alterar_emails(banco, dicionario, elemento):
     # Para alterar todos os e-mails é criada uma nova lista, e chamada a função de adicionar, depois é passado ao banco
     if opt == "1":
         emails = []
-        adicionar_email_telefone(emails, "email")
+        adicionar_email_ou_telefone(emails, "email")
         banco[dicionario][elemento][5] = emails
         return True
     
@@ -463,7 +457,7 @@ def alterar_emails(banco, dicionario, elemento):
     
     # Para adicionar e-mail aos que já existem, a ideia é a mesma da opção 1, mas não é criara uma nova lista, apenas é chamada a função de adicionar com a lista já existente no banco
     elif opt == "3":
-        adicionar_email_telefone(banco[dicionario][elemento][5], "email")
+        adicionar_email_ou_telefone(banco[dicionario][elemento][5], "email")
         return True
     
     # Para a pessoa excluir um e-mail existente a ideia é a mesma da opção de alterar existentes, mas usa o del para deletar o index escolhido
@@ -497,7 +491,7 @@ def alterar_telefones(banco, dicionario, elemento):
     opt = input("Digite sua escolha: ")
     if opt == "1":
         telefones = []
-        adicionar_email_telefone(telefones, "telefone")
+        adicionar_email_ou_telefone(telefones, "telefone")
         banco[dicionario][elemento][6] = telefones
         return True
     
@@ -511,7 +505,7 @@ def alterar_telefones(banco, dicionario, elemento):
         return True
     
     elif opt == "3":
-        adicionar_email_telefone(banco[dicionario][elemento][6], "telefone")
+        adicionar_email_ou_telefone(banco[dicionario][elemento][6], "telefone")
         return True
     
     elif opt == "4":
@@ -523,7 +517,7 @@ def alterar_telefones(banco, dicionario, elemento):
         del banco[dicionario][elemento][6][escolha]
         if len(banco[dicionario][elemento][6]) == 0:
             print("Atenção! Nenhum telefone cadastrado. É obrigatório possuir pelo menos 1 telefone para contato.")
-            adicionar_email_telefone(banco[dicionario][elemento][6], "telefone")
+            adicionar_email_ou_telefone(banco[dicionario][elemento][6], "telefone")
         return True
     
     elif opt == "5":
@@ -534,12 +528,12 @@ def alterar_telefones(banco, dicionario, elemento):
         return False
 
 #---------------------------------------------------------------------------------------------
-def excluir_profissional(banco):
+def excluir_profissional_medicina(banco):
     crm = input("Digite o CRM: ")
 
     if crm in banco["Medicina"]:
         print("------------ Profissional encontrado ------------")
-        pesquisar_profissional(banco, crm)
+        pesquisar_profissional_medicina(banco, crm)
 
         print()
         # Variável de confirmação do usuário
@@ -557,6 +551,14 @@ def excluir_profissional(banco):
     else:
         return "falha"
 
+#---------------------------------------------------------------------------------------------
+def excluir_paciente(banco):
+    pass
+
+#---------------------------------------------------------------------------------------------
+def salvar_no_arquivo(sub_dicionario, nome_arquivo):
+    pass
+
 
 ##############################################################################################
 #### Main ====================================================================================
@@ -564,38 +566,39 @@ def excluir_profissional(banco):
 def main():
     Banco = {"Medicina":{"CRM001":["Pedro de Paula", "12/12/1995", "Masculino", "Cardiologista", "UFSCar", ["pedro@gmail.com", "drpedro@unimed.com"], ["(16)99999-9999", "(16)3333-3333"]], "CRM002":["Ana Clara Souza", "06/06/2000", "Feminino", "Pneumologista", "USP", ["clara@santacasa.com"], ["(11)9999-9999", "(11)9999-8888", "(11)4444-4444"]]}, "Pacientes":{"CPF1":["Alex Nunes","27/05/1998","Masculino","Unimed",["alex@gmail.com"],["(16) 5555-5555"]],"CPF2":["Elen Maria Da Silva","06/06/1955","Feminino","SUS",["elen@gmail.com"],["(14)1234-9876"]]}, "Consultas":{}}
 
-    # Inicializa opt em 1 para entrar no loop
+
+    # Inicializa opcao_menu em 1 para entrar no loop
     # receberá novo valor de menuPrincipal()
-    opt = 1
-    while opt!=5:
-        opt = menu_Principal()
+    opcao_menu = 1
+    while opcao_menu!=5:
+        opcao_menu = menu_principal()
 
-        #inicializa opção para submenus subopt
-        subopt = 1 
-        if opt == 1:
+        #inicializa opção para submenus opcao_submenu
+        opcao_submenu = 1 
+        if opcao_menu == 1:
 
-            # enquanto subopt não indicar retorno ao menu principal(6) ou encerrar(7), repete o submenu de medicina
-            while subopt!=6 and subopt!=7:
-                subopt = submenu_Medicina()
+            # enquanto opcao_submenu não indicar retorno ao menu principal(6) ou encerrar(7), repete o submenu de medicina
+            while opcao_submenu!=6 and opcao_submenu!=7:
+                opcao_submenu = submenu_medicina()
 
                 # condições para acessar funções específicas
-                if subopt == 1:
+                if opcao_submenu == 1:
                     print()
                     print("************ Profissionais de Medicina *************")
                     mostrar_todos(Banco, "Medicina") # FUNCIONANDO
 
-                elif subopt == 2:
+                elif opcao_submenu == 2:
                     print(f"\n********** Pesquisar profissional de medicina *********** ")
                     crm = input("Digite o CRM do profissional: ")
                     print(f"\n****************** Resultado da busca ******************* ")
-                    if not pesquisar_profissional(Banco, crm):
+                    if not pesquisar_profissional_medicina(Banco, crm):
                         print(f"\n--------------------------------------------------------------")
                         print("Profissional não encontrado. Verifique o CRM e tente novamente")
                         print("--------------------------------------------------------------")
 
-                elif subopt == 3:
+                elif opcao_submenu == 3:
                     print(f"\n*************** Adicionando profissional ****************")
-                    if adicionar_profissional(Banco): #FUNCIONANDO
+                    if adicionar_profissional_medicina(Banco): #FUNCIONANDO
                         print(f"\n------------------------------------")
                         print("Profissional adicionado com sucesso!")
                         print("------------------------------------")
@@ -604,9 +607,9 @@ def main():
                         print("Já existe um profissional com este CRM.")
                         print("---------------------------------------")
 
-                elif subopt == 4:
+                elif opcao_submenu == 4:
                     print(f"\n************ Alterar cadastro profissional *************")
-                    if alterar_profissional(Banco): # FUNCIONANDO
+                    if alterar_profissional_medicina(Banco): # FUNCIONANDO
                         print(f"\n------------------------------------")
                         print("Profissional adicionado com sucesso!")
                         print("------------------------------------")
@@ -615,9 +618,9 @@ def main():
                         print("Profissional não encontrado. Verifique o CRM e tente novamente")
                         print("--------------------------------------------------------------")
 
-                elif subopt == 5:
+                elif opcao_submenu == 5:
                     print(f"\n************ Excluir cadastro profissional *************")
-                    retorno = excluir_profissional(Banco) # FUNCIONANDO
+                    retorno = excluir_profissional_medicina(Banco) # FUNCIONANDO
 
                     if  retorno == "confirmado": 
                         print(f"\n----------------------------------")
@@ -636,28 +639,28 @@ def main():
                         print("Profissional não encontrado. Verifique o CRM e tente novamente")
                         print("--------------------------------------------------------------")
 
-                elif subopt == 6:
+                elif opcao_submenu == 6:
                     print()
                     print("Retornando ao menu principal...") # FUNCIONANDO
 
-                elif subopt == 7:
-                    msg_Encerrado()
-                    opt = 5
+                elif opcao_submenu == 7:
+                    msg_encerrado()
+                    opcao_menu = 5
 
-        #Após selecionar a opção 2 inicializa o bloco de comandos.           
-        elif opt == 2:
+        #Após selecionar a opcao_menu 2 inicializa o bloco de comandos.           
+        elif opcao_menu == 2:
 
-            #Enquanto subopt for diferente de 6(menu principal) e 7(encerrar), o submenu de pacientes se repete 
-            while subopt!=6 and subopt!=7:
-                subopt=submenu_Pacientes()
+            #Enquanto opcao_submenu for diferente de 6(menu principal) e 7(encerrar), o submenu de pacientes se repete 
+            while opcao_submenu!=6 and opcao_submenu!=7:
+                opcao_submenu=submenu_pacientes()
 
                 #condições para acessar determinadas funções
-                if subopt==1:
+                if opcao_submenu==1:
                     print()
                     print("******************** Pacientes *********************")
                     mostrar_todos(Banco, "Pacientes") # FUNCIONANDO
 
-                elif subopt == 2:
+                elif opcao_submenu == 2:
                     print(f"\n****************** Pesquisar paciente ******************* ")
                     cpf=input("Digite o CPF do paciente: ")
                     print()
@@ -667,7 +670,7 @@ def main():
                         print("Paciente não encontrado. Verifique o CPF e tente novamente")
                         print("----------------------------------------------------------")
 
-                elif subopt == 3:
+                elif opcao_submenu == 3:
                     print(f"\n*************** Adicionando paciente ****************")
                     if adicionar_paciente(Banco): #FUNCIONANDO 
                         print(f"\n------------------------------------")
@@ -678,7 +681,7 @@ def main():
                         print("Já existe um paciente com este CPF.")
                         print("---------------------------------------")
 
-                elif subopt == 4:
+                elif opcao_submenu == 4:
                     print(f"\n************ Alterar cadastro paciente *************")
                     if (Banco): # FUNCIONANDO
                         print(f"\n------------------------------------")
@@ -689,22 +692,22 @@ def main():
                         print("Paciente não encontrado. Verifique o CPF e tente novamente")
                         print("--------------------------------------------------------------")
 
-                elif subopt == 5:
+                elif opcao_submenu == 5:
                     print("5. Excluir cadastro do paciente;") # TESTE
 
-                elif subopt == 6:
+                elif opcao_submenu == 6:
                     print()
                     print("Retornando ao menu principal...") # FUNCIONANDO
-                elif subopt == 7:
-                    msg_Encerrado()
-                    opt = 5
+                elif opcao_submenu == 7:
+                    msg_encerrado()
+                    opcao_menu = 5
                     
-        elif opt == 3:
-            print(submenu_Consultas()) # TESTE
-        elif opt == 4:
-            print(submenu_Relatorios()) # TESTE
-        elif opt == 5:
-            msg_Encerrado()
+        elif opcao_menu == 3:
+            print(submenu_consultas()) # TESTE
+        elif opcao_menu == 4:
+            print(submenu_relatorios()) # TESTE
+        elif opcao_menu == 5:
+            msg_encerrado()
 
 ##############################################################################################
 #### Programa principal ======================================================================
