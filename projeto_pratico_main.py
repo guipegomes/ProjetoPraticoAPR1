@@ -553,7 +553,27 @@ def excluir_profissional_medicina(banco):
 
 #---------------------------------------------------------------------------------------------
 def excluir_paciente(banco):
-    pass
+    cpf = input("Digite o CPF: ")
+
+    if cpf in banco["Pacientes"]:
+        print("------------ Paciente encontrado ------------")
+        pesquisar_paciente(banco, cpf)
+
+        print()
+        # Variável de confirmação do usuário
+        confirmar = input("Tem certeza que deseja excluir este paciente? Os dados não poderão ser recuperados.\n Digite 'Confirmar' para excluir ou 'Cancelar' para manter os dados:")
+
+        # usado .lower() para deixar tudo minúsculo
+        if confirmar.lower() == 'confirmar':
+            del banco["Pacientes"][cpf]
+            return "confirmado" #retorna confirmado, e não True, pois tem várias opções de mensagens
+        
+        elif confirmar.lower() == 'cancelar':
+            return "cancelado"
+        else:
+            return "erro"
+    else:
+        return "falha"
 
 #---------------------------------------------------------------------------------------------
 def salvar_no_arquivo(sub_dicionario, nome_arquivo):
@@ -693,7 +713,25 @@ def main():
                         print("--------------------------------------------------------------")
 
                 elif opcao_submenu == 5:
-                    print("5. Excluir cadastro do paciente;") # TESTE
+                    print(f"\n************ Excluir cadastro paciente *************")
+                    retorno = excluir_paciente(Banco) # FUNCIONANDO
+
+                    if  retorno == "confirmado": 
+                        print(f"\n----------------------------------")
+                        print("Paciente excluído com sucesso!")
+                        print("----------------------------------")
+                    elif retorno == "cancelado":
+                        print(f"\n----------------------------------------------------")
+                        print("Procedimento cancelado pelo usuário. Dados mantidos.")
+                        print("----------------------------------------------------")
+                    elif retorno == "erro":
+                        print(f"\n--------------------------------------------------")
+                        print("Erro! Confirmação não reconhecida. Tente novamente")
+                        print("--------------------------------------------------")
+                    else:
+                        print(f"\n--------------------------------------------------------------")
+                        print("Paciente não encontrado. Verifique o CPF e tente novamente")
+                        print("--------------------------------------------------------------")
 
                 elif opcao_submenu == 6:
                     print()
