@@ -344,6 +344,83 @@ def alterar_profissional(banco):
         return True
 
 #---------------------------------------------------------------------------------------------
+# Função de alteração dos dados cadastrados
+def alterar_paciente(banco): 
+    cpf = input("Digite o CPF: ")
+
+    # Verifica se está ou não cadastrado, se não estiver já retorna false
+    if cpf not in banco["Pacientes"]: 
+        return False
+    
+    else:
+        print("------------ Informações atuais ------------" )
+        #Usa-se a função de pesquisar, que deve imprimir os dados para mostrar ao usuário quais dados estão cadastrados pelo CPF informado.
+        
+        pesquisar_paciente(banco, cpf) 
+
+        print("*************** Alteração dos dados ***************")
+        
+        # Quando o usuário aperta Enter a variavel fica vazia
+        nome = input("Digite o novo nome (ou pressione Enter para manter o atual): ") 
+
+        # Se não estiver vazia é alterada no banco e uma mensagem que foi alterada é mostrada
+        if nome != "": 
+            banco["Pacientes"][cpf][0] = nome
+            print("Nome alterado!")
+            print()
+
+        # Se estiver vazio ele é mostrada mensagem que a variável foi mantida
+        else: 
+            print("Nome mantido.")
+            print()
+
+        # A mesma estrutura se repete daqui em diante para cada variável
+        nascimento = input("Digite a nova data de nascimento (ou pressione Enter para manter o atual): ")
+        if nascimento != "":
+            banco["Pacientes"][cpf][1] = nascimento
+            print("Data de nascimento alterada.")
+            print()
+        else:
+            print("Data de nascimento mantida.")
+            print()
+
+        sexo = input("Digite o novo sexo (ou pressione Enter para manter o atual): ")
+        if sexo != "":
+            banco["Pacientes"][cpf][2] = sexo
+            print("Sexo alterado.")
+            print()
+        else:
+            print("Sexo mantido.")
+            print()
+
+        plano = input("Digite o novo Plano de Saúde (ou pressione Enter para manter o atual): ")
+        if plano != "":
+            banco["Pacientes"][cpf][3] = plano
+            print("Plano de Saúde alterado.")
+            print()
+        else:
+            print("Plano de Saúde mantido.")
+            print()
+            
+         # Chama nova função para alterar e-mail, com opções para o usuário escolher
+        if alterar_emails(banco, "Pacientes", cpf):
+            print("E-mail(s) alterado(s).")
+            print()
+        else:
+            print("E-mail(s) mantido(s).")
+            print()
+
+        # Chama nova função para alterar telefone, com opções para o usuário escolher
+        if alterar_telefones(banco, "Pacientes", cpf):
+            print("Telefone(s) alterado(s).")
+            print()
+        else:
+            print("Telefone(s) mantido(s).")
+            print()
+        
+        return True
+
+#---------------------------------------------------------------------------------------------
 
 #Função usada tanto para profissionais quanto para pacientes, por isso está separada
 def alterar_emails(banco, dicionario, elemento):
@@ -541,7 +618,7 @@ def main():
 
                 elif subopt == 3:
                     print(f"\n*************** Adicionando paciente ****************")
-                    if adicionar_paciente(Banco): 
+                    if adicionar_paciente(Banco): #FUNCIONANDO 
                         print(f"\n------------------------------------")
                         print("Paciente adicionado com sucesso!")
                         print("------------------------------------")
@@ -551,7 +628,16 @@ def main():
                         print("---------------------------------------")
                         
                 elif subopt == 4:
-                    print("4. Alterar cadastro do paciente;") # TESTE
+                    print(f"\n************ Alterar cadastro paciente *************")
+                    if (Banco): # FUNCIONANDO
+                        print(f"\n------------------------------------")
+                        print("Paciente adicionado com sucesso!")
+                        print("------------------------------------")
+                    else:
+                        print(f"\n--------------------------------------------------------------")
+                        print("Paciente não encontrado. Verifique o CPF e tente novamente")
+                        print("--------------------------------------------------------------")
+                        
                 elif subopt == 5:
                     print("5. Excluir cadastro do paciente;") # TESTE
                 elif subopt == 6:
