@@ -133,11 +133,15 @@ def mostrar_todos_os_profissionais(dicionario):
             return True
 
 #---------------------------------------------------------------------------------------------
-def mostrar_todos_os_pacientes(dicionario):
-        #Para cada elemento em banco chama a função de pesquisar 
+def mostrar_todos_os_pacientes(dicionario):  
+       
+       if len(dicionario) == 0:
+        return False
+       else:
         for cpf in dicionario:
             pesquisar_paciente(dicionario, cpf)
             print("----------------------------------------------------")
+        return True
 
 #---------------------------------------------------------------------------------------------
 def mostrar_todas_as_consultas(dicionario): 
@@ -167,22 +171,22 @@ def pesquisar_profissional_medicina(dicionario, crm):
         return False
 
 #---------------------------------------------------------------------------------------------
-def pesquisar_paciente(banco, cpf):
-    paciente = banco["Pacientes"]
-    if cpf in paciente:
+def pesquisar_paciente(dicionario, cpf):
+  
+    if cpf in dicionario:
         print(f"CPF: {cpf}")
-        print(f"Nome: {paciente[cpf][0]}")
-        print(f"Data de nascimento: {paciente[cpf][1]}")
-        print(f"Sexo: {paciente[cpf][2]}")
-        print(f"Plano de Saúde: {paciente[cpf][3]}")
+        print(f"Nome: {dicionario[cpf][0]}")
+        print(f"Data de nascimento: {dicionario[cpf][1]}")
+        print(f"Sexo: {dicionario[cpf][2]}")
+        print(f"Plano de Saúde: {dicionario[cpf][3]}")
         print(f"Emails:")
-        if len(paciente[cpf][5]) == 0:
+        if len(dicionario[cpf][5]) == 0:
             print(f"\t- Não há e-mails cadastrados")
         else:
-            for email in paciente[cpf][4]:
+            for email in dicionario[cpf][4]:
                 print(f"\t- {email}")
         print("Telefones:")
-        for telefone in paciente[cpf][5]:
+        for telefone in dicionario[cpf][5]:
                 print(f"\t- {telefone}")
         return True
     else:
@@ -217,36 +221,12 @@ def cadastrar_profissional_medicina(dicionario, caminho_arquivo):
 
         dicionario[crm] = profissional
 
-        return salvar_dictMedicina_no_arquivo(dicionario, caminho_arquivo)
+        return salvar_dicionario_no_arquivo(dicionario, caminho_arquivo)
     
-#---------------------------------------------------------------------------------------------
-def salvar_dictMedicina_no_arquivo(dicionario, caminho_arquivo):
-    arquivo = open(caminho_arquivo, 'w')
-    for chave, valor in dicionario.items():
-        linha = ""
-        linha = f"{chave}: "
-        for i in range(len(valor)):
-            if str(valor[i]).startswith('[') and str(valor[i]).endswith(']'):
-                linha += "["
-                for j in range(len(valor[i])):
-                    if j == (len(valor[i])-1):
-                        linha += f"{valor[i][j]}"
-                    else:
-                        linha += f"{valor[i][j]} "
-                linha += "], "
-            else:
-                linha += f"{valor[i]}, "
-        if linha.endswith(', '):
-            linha = linha.rstrip(', ') + f"\n"
-
-        arquivo.write(linha)
-    arquivo.close()
-
-    return True
 
 #---------------------------------------------------------------------------------------------
-def adicionar_paciente(banco): 
-    
+def cadastrar_paciente(dicionario,caminho_arquivo): 
+
     # inicializa listas que serão usadas
     paciente = []
     emails = []
@@ -255,8 +235,10 @@ def adicionar_paciente(banco):
     cpf = input("Digite o CPF do paciente:")
     
     # verifica se já está cadastrado e retorna falso caso esteja
-    if cpf in banco["Pacientes"]: 
+    if cpf in dicionario:
+
         return False
+    
     else:
         
         paciente.append(input("Digite o nome: "))
@@ -270,8 +252,9 @@ def adicionar_paciente(banco):
         paciente.append(telefones) 
 
         # Passa para o CPF certo as informações do paciente criado aqui
-        banco["Pacientes"][cpf] = paciente 
-        return True
+        dicionario[cpf] = paciente 
+        
+        return salvar_dicionario_no_arquivo(dicionario,caminho_arquivo)
         
 #---------------------------------------------------------------------------------------------
 
@@ -358,22 +341,22 @@ def alterar_profissional_medicina(dicionario, caminho_arquivo):
             print("Telefone(s) mantido(s).")
             print()
         
-        return salvar_dictMedicina_no_arquivo(dicionario, caminho_arquivo)
+        return salvar_dicionario_no_arquivo(dicionario, caminho_arquivo)
 
 #---------------------------------------------------------------------------------------------
 # Função de alteração dos dados cadastrados
-def alterar_paciente(banco): 
+def alterar_paciente(dicionario,caminho_arquivo): 
     cpf = input("Digite o CPF: ")
 
     # Verifica se está ou não cadastrado, se não estiver já retorna false
-    if cpf not in banco["Pacientes"]: 
+    if cpf not in dicionario: 
         return False
     
     else:
         print("------------ Informações atuais ------------" )
         #Usa-se a função de pesquisar, que deve imprimir os dados para mostrar ao usuário quais dados estão cadastrados pelo CPF informado.
         
-        pesquisar_paciente(banco, cpf) 
+        pesquisar_paciente(dicionario, cpf) 
 
         print("*************** Alteração dos dados ***************")
         
@@ -382,7 +365,7 @@ def alterar_paciente(banco):
 
         # Se não estiver vazia é alterada no banco e uma mensagem que foi alterada é mostrada
         if nome != "": 
-            banco["Pacientes"][cpf][0] = nome
+            dicionario[cpf][0] = nome
             print("Nome alterado!")
             print()
 
@@ -394,7 +377,7 @@ def alterar_paciente(banco):
         # A mesma estrutura se repete daqui em diante para cada variável
         nascimento = input("Digite a nova data de nascimento (ou pressione Enter para manter o atual): ")
         if nascimento != "":
-            banco["Pacientes"][cpf][1] = nascimento
+            dicionario[cpf][1] = nascimento
             print("Data de nascimento alterada.")
             print()
         else:
@@ -403,7 +386,7 @@ def alterar_paciente(banco):
 
         sexo = input("Digite o novo sexo (ou pressione Enter para manter o atual): ")
         if sexo != "":
-            banco["Pacientes"][cpf][2] = sexo
+            dicionario[cpf][2] = sexo
             print("Sexo alterado.")
             print()
         else:
@@ -412,7 +395,7 @@ def alterar_paciente(banco):
 
         plano = input("Digite o novo Plano de Saúde (ou pressione Enter para manter o atual): ")
         if plano != "":
-            banco["Pacientes"][cpf][3] = plano
+            dicionario[cpf][3] = plano
             print("Plano de Saúde alterado.")
             print()
         else:
@@ -420,7 +403,7 @@ def alterar_paciente(banco):
             print()
             
         # Chama nova função para alterar e-mail, com opções para o usuário escolher
-        if alterar_emails(banco, "Pacientes", cpf):
+        if alterar_emails(dicionario,  cpf):
             print("E-mail(s) alterado(s).")
             print()
         else:
@@ -428,14 +411,14 @@ def alterar_paciente(banco):
             print()
 
         # Chama nova função para alterar telefone, com opções para o usuário escolher
-        if alterar_telefones(banco, "Pacientes", cpf):
+        if alterar_telefones(dicionario,  cpf):
             print("Telefone(s) alterado(s).")
             print()
         else:
             print("Telefone(s) mantido(s).")
             print()
         
-        return True
+        return salvar_dicionario_no_arquivo(dicionario,caminho_arquivo)
 
 #---------------------------------------------------------------------------------------------
 
@@ -451,11 +434,17 @@ def alterar_emails(dicionario, elemento):
     print("5. Manter e-mail(s) atual(is);")
     opt = input("Digite sua escolha: ")
 
+    posicao=0
+    if elemento.lower() == "cpf":
+        posicao=4
+    else:
+        posicao=5
+        
     # Para alterar todos os e-mails é criada uma nova lista, e chamada a função de adicionar, depois é passado ao banco
     if opt == "1":
         emails = []
         adicionar_email(emails)
-        dicionario[elemento][5] = emails
+        dicionario[elemento][posicao] = emails
         return True
     
     # Para alterar somente um e-mail existente 
@@ -463,7 +452,7 @@ def alterar_emails(dicionario, elemento):
         i = 0
 
         # Mostra ao usuário os e-mails cadastrados com index i
-        for email in dicionario[elemento][5]:
+        for email in dicionario[elemento][posicao]:
             print(f"{i} - {email}")
             i+=1
         
@@ -471,22 +460,22 @@ def alterar_emails(dicionario, elemento):
         index = int(input("Qual e-mail deseja alterar? Digite apenas o número: "))
 
         # Altera o e-mail com base na escolha do usuário
-        dicionario[elemento][5][index] = input("Digite o novo e-mail: ")
+        dicionario[elemento][posicao][index] = input("Digite o novo e-mail: ")
         return True
     
     # Para adicionar e-mail aos que já existem, a ideia é a mesma da opção 1, mas não é criara uma nova lista, apenas é chamada a função de adicionar com a lista já existente no banco
     elif opt == "3":
-        adicionar_email(dicionario[elemento][5])
+        adicionar_email(dicionario[elemento][posicao])
         return True
     
     # Para a pessoa excluir um e-mail existente a ideia é a mesma da opção de alterar existentes, mas usa o del para deletar o index escolhido
     elif opt == "4":
         i = 0
-        for email in dicionario[elemento][5]:
+        for email in dicionario[elemento][posicao]:
             print(f"{i} - {email}")
             i+=1
         index = int(input("Qual e-mail deseja excluir? Digite apenas o número: "))
-        del dicionario[elemento][5][index]
+        del dicionario[elemento][posicao][index]
         return True
     
     elif opt == "5":
@@ -508,35 +497,42 @@ def alterar_telefones(dicionario, elemento):
     print("4. Excluir telefone existente;")
     print("5. Manter telefone(s) atual(is);")
     opt = input("Digite sua escolha: ")
+    
+    posicao=0 
+    if elemento.lower() == "cpf":
+        posicao = 5
+    else:
+        posicao = 6
+        
     if opt == "1":
         telefones = []
         adicionar_telefone(telefones)
-        dicionario[elemento][6] = telefones
+        dicionario[elemento][posicao] = telefones
         return True
     
     elif opt == "2":
         i = 0
-        for telefone in dicionario[elemento][6]:
+        for telefone in dicionario[elemento][posicao]:
             print(f"{i} - {telefone}")
             i+=1
         escolha = int(input("Qual telefone deseja alterar? Digite apenas o número: "))
-        dicionario[elemento][6][escolha] = input("Digite o novo telefone (Formato: (00)00000-0000): ")
+        dicionario[elemento][posicao][escolha] = input("Digite o novo telefone (Formato: (00)00000-0000): ")
         return True
     
     elif opt == "3":
-        adicionar_telefone(dicionario[elemento][6])
+        adicionar_telefone(dicionario[elemento][posicao])
         return True
     
     elif opt == "4":
         i = 0
-        for telefone in dicionario[elemento][6]:
+        for telefone in dicionario[elemento][posicao]:
             print(f"{i} - {telefone}")
             i+=1
         escolha = int(input("Qual telefone deseja excluir? Digite apenas o número: "))
-        del dicionario[elemento][6][escolha]
-        if len(dicionario[elemento][6]) == 0:
+        del dicionario[elemento][posicao][escolha]
+        if len(dicionario[elemento][posicao]) == 0:
             print("Atenção! Nenhum telefone cadastrado. É obrigatório possuir pelo menos 1 telefone para contato.")
-            adicionar_telefone(dicionario[elemento][6])
+            adicionar_telefone(dicionario[elemento][posicao])
         return True
     
     elif opt == "5":
@@ -561,7 +557,7 @@ def excluir_profissional_medicina(dicionario, caminho_arquivo):
         # usado .lower() para deixar tudo minúsculo
         if confirmar.lower() == 'confirmar':
             del dicionario[crm]
-            salvar_dictMedicina_no_arquivo(dicionario, caminho_arquivo)
+            salvar_dicionario_no_arquivo(dicionario, caminho_arquivo)
             return "confirmado" #retorna confirmado, e não True, pois tem várias opções de mensagens
         
         elif confirmar.lower() == 'cancelar':
@@ -572,12 +568,13 @@ def excluir_profissional_medicina(dicionario, caminho_arquivo):
         return "falha"
 
 #---------------------------------------------------------------------------------------------
-def excluir_paciente(banco):
+def excluir_paciente(dicionario,caminho_arquivo):
+
     cpf = input("Digite o CPF: ")
 
-    if cpf in banco["Pacientes"]:
+    if cpf in dicionario:
         print("------------ Paciente encontrado ------------")
-        pesquisar_paciente(banco, cpf)
+        pesquisar_paciente(dicionario, cpf)
 
         print()
         # Variável de confirmação do usuário
@@ -585,7 +582,8 @@ def excluir_paciente(banco):
 
         # usado .lower() para deixar tudo minúsculo
         if confirmar.lower() == 'confirmar':
-            del banco["Pacientes"][cpf]
+            del dicionario[cpf]
+            salvar_dicionario_no_arquivo(dicionario,caminho_arquivo)
             return "confirmado" #retorna confirmado, e não True, pois tem várias opções de mensagens
         
         elif confirmar.lower() == 'cancelar':
@@ -626,7 +624,48 @@ def pegar_dados_do_arquivo_medicina(dicionario):
 
 #---------------------------------------------------------------------------------------------
 def pegar_dados_do_arquivo_pacientes(dicionario):
-    pass
+    arquivo_paciente=open('./pacientes.txt','r')
+
+    for linha in arquivo_paciente:
+        linha=linha.strip()
+
+        chave,valor=linha.split(":", 1)
+        elementos_do_valor=valor.split(",")
+        emails=elementos_do_valor[4]
+        emails=emails[1:-1].strip("")
+        telefones=elementos_do_valor[5]
+        telefones=telefones[1:-1].strip().split("")
+
+        dicionario[chave]=elementos_do_valor[:4] + [emails] + [telefones]
+
+        arquivo_paciente.close()
+#---------------------------------------------------------------------------------------------
+
+def salvar_dicionario_no_arquivo(dicionario, caminho_arquivo):
+    arquivo = open(caminho_arquivo, 'w')
+    for chave, valor in dicionario.items():
+        linha = ""
+        linha = f"{chave}: "
+        for i in range(len(valor)):
+            if str(valor[i]).startswith('[') and str(valor[i]).endswith(']'):
+                linha += "["
+                for j in range(len(valor[i])):
+                    if j == (len(valor[i])-1):
+                        linha += f"{valor[i][j]}"
+                    else:
+                        linha += f"{valor[i][j]} "
+                linha += "], "
+            else:
+                linha += f"{valor[i]}, "
+        if linha.endswith(', '):
+            linha = linha.rstrip(', ') + f"\n"
+
+        arquivo.write(linha)
+    arquivo.close()
+
+    return True
+#---------------------------------------------------------------------------------------------
+
 
 
 ##############################################################################################
@@ -735,6 +774,17 @@ def main():
 
         #Após selecionar a opcao_menu 2 inicializa o bloco de comandos.           
         elif opcao_menu == 2:
+            caminho_arquivo_paciente = './pacientes.txt'
+            
+            #Se o arquivo não existir, cria um arquivo
+            
+            if not arquivo_existe(caminho_arquivo_paciente):
+                print()
+                print(f"O arquivo {caminho_arquivo_paciente} não foi encontrado. Será criado um novo arquivo.")
+                arquivo_pacientes=open(caminho_arquivo_paciente,'w')
+                arquivo_pacientes.close()
+                #Coloca no dicionario pacientes os dados do arquivo texto
+                pegar_dados_do_arquivo_pacientes(Pacientes)
 
             #Enquanto opcao_submenu for diferente de 6(menu principal) e 7(encerrar), o submenu de pacientes se repete 
             while opcao_submenu!=6 and opcao_submenu!=7:
@@ -743,22 +793,25 @@ def main():
                 #condições para acessar determinadas funções
                 if opcao_submenu==1:
                     print()
-                    print("******************** Pacientes *********************")
-                    mostrar_todos_os_pacientes(Banco) # FUNCIONANDO
+                    print(("************ Pacientes *************"))
+                    if not mostrar_todos_os_pacientes(Pacientes):
+                        print(f"\n---------------------------------------------------")
+                        print("Não há pacientes cadastrados ainda.")
+                        print("---------------------------------------------------")
 
                 elif opcao_submenu == 2:
                     print(f"\n****************** Pesquisar paciente ******************* ")
                     cpf=input("Digite o CPF do paciente: ")
-                    print()
+                    
                     print(f"\n****************** Resultado da busca ******************* ") 
-                    if not pesquisar_paciente(Banco, cpf): # FUNCIONANDO
+                    if not pesquisar_paciente(Pacientes, cpf): # FUNCIONANDO
                         print(f"\n----------------------------------------------------------")
                         print("Paciente não encontrado. Verifique o CPF e tente novamente")
                         print("----------------------------------------------------------")
 
                 elif opcao_submenu == 3:
                     print(f"\n*************** Adicionando paciente ****************")
-                    if adicionar_paciente(Banco): #FUNCIONANDO 
+                    if cadastrar_paciente(Pacientes,caminho_arquivo_paciente): #FUNCIONANDO 
                         print(f"\n------------------------------------")
                         print("Paciente adicionado com sucesso!")
                         print("------------------------------------")
@@ -769,7 +822,7 @@ def main():
 
                 elif opcao_submenu == 4:
                     print(f"\n************ Alterar cadastro paciente *************")
-                    if (Banco): # FUNCIONANDO
+                    if alterar_paciente(Pacientes,caminho_arquivo_paciente): # FUNCIONANDO
                         print(f"\n------------------------------------")
                         print("Paciente adicionado com sucesso!")
                         print("------------------------------------")
@@ -780,7 +833,7 @@ def main():
 
                 elif opcao_submenu == 5:
                     print(f"\n************ Excluir cadastro paciente *************")
-                    retorno = excluir_paciente(Banco) # FUNCIONANDO
+                    retorno = excluir_paciente(Pacientes,caminho_arquivo_paciente) # FUNCIONANDO
 
                     if  retorno == "confirmado": 
                         print(f"\n----------------------------------")
