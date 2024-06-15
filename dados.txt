@@ -1,3 +1,0 @@
-CRM/SP 111111: Pedro de Paula, 12/12/1995, Masculino, Cardiologista, UFSCar, [pedro@gmail.com drpedro@unimed.com], [(16)99999-9999 (16)3333-3333]
-CRM/SP 222222: Ana Clara Souza, 06/06/2000, Feminino, Pneumologista, USP, [clara@santacasa.com], [(11)9999-9999 (11)9999-8888 (11)4444-4444]
-CRM/SP 333333: João da Silva, 25/09/1990, Masculino, Ortopedista, UNESP, [joao.silva@hospital.com joao.s@medicos.com], [(21)8888-8888]
