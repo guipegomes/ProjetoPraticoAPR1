@@ -373,13 +373,13 @@ def pesquisar_paciente(dicionario, cpf):
         print(f"Sexo: {dicionario[cpf][2]}")
         print(f"Plano de Saúde: {dicionario[cpf][3]}")
         print(f"Emails:")
-        if len(dicionario[cpf][5]) == 0:
+        if len(dicionario[cpf][4]) == 0:
             print(f"\t- Não há e-mails cadastrados")
         else:
-            for email in dicionario[cpf][4]:
+            for email in dicionario[cpf][5]:
                 print(f"\t- {email}")
         print("Telefones:")
-        for telefone in dicionario[cpf][5]:
+        for telefone in dicionario[cpf][6]:
                 print(f"\t- {telefone}")
         return True
     else:
