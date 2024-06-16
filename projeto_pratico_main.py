@@ -1,3 +1,6 @@
+#### Importações ============================================================================
+import os
+import datetime
 #############################################################################################
 #### Repetições =============================================================================
 #############################################################################################
@@ -33,8 +36,8 @@ def chave_existe_no_dicionario(dicionario, chave): # chave vem como crm, cpf ou 
 def criar_tupla_chaves():
     crm = input("Digite o CRM do profissional: ")
     cpf = input("Digite o CPF do paciente (Somente números): ")
-    data_da_consulta = input("Digite a data da consulta (DD/MM/AAAA): ")
-    hora_da_consulta =  input("Digite a hora da consulta (Formato: 9:00, 15:30): ")
+    data_da_consulta = input("Digite a data da consulta (DD-MM-AAAA): ")
+    hora_da_consulta =  input("Digite a hora da consulta (Formato: 9h00, 15h30): ")
     tupla_chaves = (crm, cpf, data_da_consulta, hora_da_consulta)
     return tupla_chaves
 
@@ -238,6 +241,25 @@ def alterar_medicamentos(dicionario, tupla_chaves):
         print(f"\nAtenção! Opção inválida.")
         return False
 
+#--------------------------------------------------------------------------------------------
+def obter_datetime_agora_data_e_hora():
+    agora = datetime.datetime.now()
+    data = agora.strftime("%d-%m-%Y")
+    hora = agora.strftime("%Hh%Mm%Ss")
+    return agora, data, hora
+
+#--------------------------------------------------------------------------------------------
+def obter_idade(dicionario, chave, agora):
+    from datetime import datetime
+    data_nascimento = datetime.strptime(dicionario[chave][1], "%d-%m-%Y")
+    idade_pessoa = agora.year - data_nascimento.year
+    if agora.month == data_nascimento.month:
+        if agora.day < data_nascimento.day:
+            idade_pessoa -= 1
+    elif agora.month < data_nascimento.month:
+        idade_pessoa -= 1
+    return idade_pessoa
+
 #############################################################################################
 #### Mensagens ==============================================================================
 #############################################################################################
@@ -307,7 +329,16 @@ def submenu_consultas():
 
 #--------------------------------------------------------------------------------------------
 def submenu_relatorios():
-    return "========================================\nRELATÓRIOS"
+    print()
+    print("================== Menu de Relatórios ===================")
+    print("1. Gerar relatório de especialidade médica específica;")
+    print("2. Gerar relatório de pacientes até a idade específica;")
+    print("3. Gerar relatório de consultas dos últimos dias;")
+    print("4. Retornar ao Menu Principal;")
+    print("5. Encerrar.")
+
+    return verifica_escolha_do_usuario(5)
+
 
 #############################################################################################
 #### Funções Específicas ====================================================================
@@ -364,7 +395,7 @@ def pesquisar_profissional_medicina(dicionario, crm):
     else:
         return False
 
-#---------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------
 def pesquisar_paciente(dicionario, cpf):
     if chave_existe_no_dicionario(dicionario, cpf):
         print(f"CPF: {cpf}")
@@ -420,7 +451,7 @@ def cadastrar_profissional_medicina(dicionario, caminho_arquivo):
         return False
     else:
         profissional.append(input("Digite o nome: "))
-        profissional.append(input("Digite a data de nascimento (Formato: DD/MM/AAAA): "))
+        profissional.append(input("Digite a data de nascimento (Formato: DD-MM-AAAA): "))
         profissional.append(input("Digite o sexo (Masculino, Feminino ou Não-binário): "))
         profissional.append(input("Digite a especialidade (Ex: Cardiologista): "))
         profissional.append(input("Digite a universidade de formação (Ex: UFSCar): "))
@@ -434,7 +465,7 @@ def cadastrar_profissional_medicina(dicionario, caminho_arquivo):
 
         return salvar_dicionario_no_arquivo(dicionario, caminho_arquivo)
     
-#---------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------
 def cadastrar_paciente(dicionario,caminho_arquivo): 
     paciente = []
     emails = []
@@ -447,7 +478,7 @@ def cadastrar_paciente(dicionario,caminho_arquivo):
     
     else:
         paciente.append(input("Digite o nome: "))
-        paciente.append(input("Digite a data de nascimento (Formato: DD/MM/AAAA): "))
+        paciente.append(input("Digite a data de nascimento (Formato: DD-MM-AAAA): "))
         paciente.append(input("Digite o sexo (Masculino, Feminino ou Não-binário): "))
         paciente.append(input("Digite o Plano de Saúde (Ex: Unimed): "))
         
@@ -494,18 +525,24 @@ def cadastrar_consulta(dict_consultas, dict_medicina, dict_pacientes, caminho_ar
 #--------------------------------------------------------------------------------------------
 def pode_agendar_consulta(dict_consultas, dict_medicina, dict_pacientes, tupla_chaves):
     crm, cpf, data_consulta, hora_consulta = tupla_chaves
+
     for tupla in dict_consultas:
         crm_existente, cpf_existente, data_existente, hora_existente = tupla
+
         if (crm == crm_existente or cpf == cpf_existente) and data_consulta == data_existente and hora_consulta == hora_existente:
+
             if crm == crm_existente:
                 print()
                 print("Atenção! Já existe uma consulta com este profissional neste dia e horário: ")
                 pesquisar_consulta(dict_consultas, dict_medicina, dict_pacientes, tupla)
+
             elif cpf == cpf_existente:
                 print()
                 print("Atenção! Já existe uma consulta para este paciente neste dia e horário: ")
                 pesquisar_consulta(dict_consultas, dict_medicina, dict_pacientes, tupla)
+
             return False
+        
     return True
 
 #--------------------------------------------------------------------------------------------
@@ -530,7 +567,7 @@ def alterar_profissional_medicina(dicionario, caminho_arquivo):
             print("Nome mantido.")
             print()
 
-        nascimento = input("Digite a nova data de nascimento (ou pressione Enter para manter o atual): ")
+        nascimento = input("Digite a nova data de nascimento (Formato: DD-MM-AAAA) (ou pressione Enter para manter o atual): ")
         if nascimento != "":
             dicionario[crm][1] = nascimento
             print("Data de nascimento alterada.")
@@ -606,7 +643,7 @@ def alterar_paciente(dicionario,caminho_arquivo):
             print("Nome mantido.")
             print()
 
-        nascimento = input("Digite a nova data de nascimento (ou pressione Enter para manter o atual): ")
+        nascimento = input("Digite a nova data de nascimento (Formato: DD-MM-AAAA) (ou pressione Enter para manter o atual): ")
         if nascimento != "":
             dicionario[cpf][1] = nascimento
             print("Data de nascimento alterada.")
@@ -624,7 +661,7 @@ def alterar_paciente(dicionario,caminho_arquivo):
             print("Sexo mantido.")
             print()
 
-        plano = input("Digite o novo Plano de Saúde (ou pressione Enter para manter o atual): ")
+        plano = input("Digite o novo Plano de Saúde (Ex: Unimed) (ou pressione Enter para manter o atual): ")
         if plano != "":
             dicionario[cpf][3] = plano
             print("Plano de Saúde alterado.")
@@ -633,21 +670,21 @@ def alterar_paciente(dicionario,caminho_arquivo):
             print("Plano de Saúde mantido.")
             print()
             
-        if alterar_emails(dicionario,  cpf):
+        if alterar_emails(dicionario, cpf):
             print("E-mail(s) alterado(s).")
             print()
         else:
             print("E-mail(s) mantido(s).")
             print()
 
-        if alterar_telefones(dicionario,  cpf):
+        if alterar_telefones(dicionario, cpf):
             print("Telefone(s) alterado(s).")
             print()
         else:
             print("Telefone(s) mantido(s).")
             print()
         
-        return salvar_dicionario_no_arquivo(dicionario,caminho_arquivo)
+        return salvar_dicionario_no_arquivo(dicionario, caminho_arquivo)
     
     else:
         return False
@@ -686,7 +723,7 @@ def alterar_consulta(dict_consultas, dict_medicina, dict_pacientes, caminho_arqu
             print("CRM mantido.")
             print()
 
-        data_da_consulta = input("Digite a nova data da consulta (Formato: DD/MM/AAAA) (ou pressione Enter para manter o atual): ")
+        data_da_consulta = input("Digite a nova data da consulta (Formato: DD-MM-AAAA) (ou pressione Enter para manter a atual): ")
         if data_da_consulta != "":
             nova_tupla = (crm, cpf, data_da_consulta, hora_da_consulta)
             print("Data da consulta alterada!")
@@ -697,7 +734,7 @@ def alterar_consulta(dict_consultas, dict_medicina, dict_pacientes, caminho_arqu
             print("Data da consulta mantida.")
             print()
         
-        hora_da_consulta = input("Digite a nova hora da consulta (Formato 24h: 07:00; 19:00) (ou pressione Enter para manter o atual): ")
+        hora_da_consulta = input("Digite a nova hora da consulta (Formato 24h: 07h00; 19h00) (ou pressione Enter para manter a atual): ")
         if hora_da_consulta != "":
             nova_tupla = (crm, cpf, data_da_consulta, hora_da_consulta)
             print("Hora da consulta alterada!")
@@ -731,7 +768,7 @@ def alterar_consulta(dict_consultas, dict_medicina, dict_pacientes, caminho_arqu
     else:
         return False
 
-#---------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------
 def excluir_profissional_medicina(dicionario, caminho_arquivo):
     crm = input("Digite o CRM: ")
 
@@ -756,7 +793,7 @@ def excluir_profissional_medicina(dicionario, caminho_arquivo):
     else:
         return "falha"
 
-#---------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------
 def excluir_paciente(dicionario, caminho_arquivo):
     cpf = input("Digite o CPF: ")
 
@@ -805,14 +842,167 @@ def excluir_consulta(dict_consultas, dict_medicina, dict_pacientes, caminho_arqu
         
     else:
         return "falha"
+    
+#############################################################################################
+#### Relatórios =============================================================================
+#############################################################################################
+def gerar_relatorio_medicos_por_especialidade(dicionario, especialidade):
+    _, data, hora = obter_datetime_agora_data_e_hora()
+    nome_relatorio = f"REL_ESP_{especialidade}_-_{data}_às_{hora}.txt"
+    diretorio_atual = os.getcwd()
+    caminho_relatorio = os.path.join(diretorio_atual, nome_relatorio)
+
+    chaves = []
+    for chave, valor in dicionario.items():
+        if especialidade in valor:
+            chaves.append(chave)
+    
+    if len(chaves) > 0:
+        relatorio = open(caminho_relatorio, 'w')
+        relatorio.write(f"=================================================================\n")
+        relatorio.write(f"Relatório de profissionais de medicina\n")
+        relatorio.write(f"Especialidade: {especialidade}\n")
+        relatorio.write(f"Gerado dia {data} às {hora}.\n")
+        relatorio.write(f"=================================================================\n")
+
+        for chave in chaves:
+            relatorio.write(f"CRM: {chave}\n")
+            relatorio.write(f"Nome: {dicionario[chave][0]}\n")
+            relatorio.write(f"Data de nascimento: {dicionario[chave][1]}\n")
+            relatorio.write(f"Sexo: {dicionario[chave][2]}\n")
+            relatorio.write(f"Universidade de formação: {dicionario[chave][4]}\n")
+            
+            relatorio.write(f"E-mails:\n")
+            for email in dicionario[chave][5]:
+                relatorio.write(f"\t- {email}\n")
+            
+            relatorio.write(f"Telefones:\n")
+            for telefone in dicionario[chave][6]:
+                relatorio.write(f"\t- {telefone}\n")
+            relatorio.write("-------------------------------------------------------------------\n")
+        print()
+        print(f"Gerando relatório em {caminho_relatorio}")
+        return True
+    else:
+        print(f"Não existem médicos cadastrados com a especialidade {especialidade}.")
+        return False
+
+#--------------------------------------------------------------------------------------------
+def gerar_relatorio_paciente_por_idade(dicionario, idade_maxima):
+
+    # Pega a data completa em 'agora' e data e hora separados
+    agora, data, hora = obter_datetime_agora_data_e_hora()
+
+    #coloca nome no relatório que será gerado
+    nome_relatorio = f"REL_PAC_até_{idade_maxima}_anos_-_{data}_as_{hora}.txt"
+
+    # pega o diretório atual utilizando o método os
+    diretorio_atual = os.getcwd()
+
+    #juntando o diretório atual com o nome do relatório é criado o caminho completo do relatório
+    caminho_relatorio = os.path.join(diretorio_atual, nome_relatorio)
+
+    # criada lista que guardará os pacientes encontrados pela busca por idade
+    chaves = []
+    for chave in dicionario:
+
+        # chama função que calcula a idade de uma pessoa cadastrada
+        idade_paciente = obter_idade(dicionario, chave, agora)
+
+        #se a idade for menor ou igual, é adicionada a chave na lista
+        if idade_paciente <= idade_maxima:
+            chaves.append(chave)
+    
+    # só cria o arquivo se encontrar ao menos 1
+    if len(chaves) > 0:
+        relatorio = open(caminho_relatorio, 'w')
+        relatorio.write(f"=================================================================\n")
+        relatorio.write(f"Relatório de Pacientes por idade\n")
+        relatorio.write(f"Idade máxima: {idade_maxima}\n")
+        relatorio.write(f"Gerado dia {data} às {hora}.\n")
+        relatorio.write(f"=================================================================\n")
+
+        for chave in chaves:
+            relatorio.write(f"CPF: {chave}\n")
+            relatorio.write(f"Nome: {dicionario[chave][0]}\n")
+            relatorio.write(f"Data de nascimento: {dicionario[chave][1]}\n")
+            relatorio.write(f"Idade: {obter_idade(dicionario, chave, agora)}\n")
+            relatorio.write(f"Sexo: {dicionario[chave][2]}\n")
+            relatorio.write(f"Plano de Saúde: {dicionario[chave][3]}\n")
+            
+            relatorio.write(f"E-mails:\n")
+            for email in dicionario[chave][4]:
+                relatorio.write(f"\t- {email}\n")
+            
+            relatorio.write(f"Telefones:\n")
+            for telefone in dicionario[chave][5]:
+                relatorio.write(f"\t- {telefone}\n")
+            relatorio.write("-------------------------------------------------------------------\n")
+        print()
+        print(f"Gerando relatório em {caminho_relatorio}")
+        return True
+    else: #caso não encontre nenhum só passa a mensagem que não existem pacientes
+        print(f"Não existem pacientes menores que {idade_maxima} anos.")
+        return False
+
+#--------------------------------------------------------------------------------------------
+def gerar_relatorio_consultas_ultimos_dias(dict_consultas, dict_medicina, dict_pacientes, numero_dias):
+    from datetime import datetime, timedelta
+    agora, data, hora = obter_datetime_agora_data_e_hora()
+    nome_relatorio = f"REL_CONS_Ultimos_{numero_dias}_dias_-_{data}_às_{hora}.txt"
+    diretorio_atual = os.getcwd()
+    caminho_relatorio = os.path.join(diretorio_atual, nome_relatorio)
+
+    data_de_inicio = agora - timedelta(days=numero_dias)
+    data_agora = datetime.strptime(data, '%d-%m-%Y')
+
+    chaves = []
+    for chave in dict_consultas:
+        data_da_consulta = datetime.strptime(chave[2], '%d-%m-%Y')
+        if data_da_consulta >= data_de_inicio and data_da_consulta <= data_agora:
+            chaves.append(chave)
+
+    if len(chaves) > 0:
+        relatorio = open(caminho_relatorio, 'w')
+        relatorio.write(f"=================================================================\n")
+        relatorio.write(f"Relatório de Consultas nos últimos {numero_dias} dia(s). \n")
+        relatorio.write(f"Gerado dia {data} às {hora}.\n")
+        relatorio.write(f"=================================================================\n")
+
+        for chave in chaves:
+            crm = chave[0]
+            nome_profissional = dict_medicina[crm][0]
+            cpf = chave[1]
+            nome_paciente = dict_pacientes[cpf][0]
+            data_da_consulta = chave[2]
+            hora_da_consulta = chave[3]
+            diagnostico = dict_consultas[chave][0]
+            medicamentos = dict_consultas[chave][1]
+            posologias = dict_consultas[chave][2]
+
+            relatorio.write(f"Profissional: {nome_profissional}, CRM: {crm}\n")
+            relatorio.write(f"Paciente: {nome_paciente}, CPF: {cpf}\n")
+            relatorio.write(f"Data da consulta: {data_da_consulta}\n")
+            relatorio.write(f"Hora da consulta: {hora_da_consulta}\n")
+            relatorio.write(f"Diagnóstico: {diagnostico}\n")
+            relatorio.write(f"Medicamentos:\n")
+
+            for i in range(len(medicamentos)):
+                relatorio.write(f"\t- {medicamentos[i]} - {posologias[i]}\n")
+            relatorio.write("-------------------------------------------------------------------\n")
+        print()
+        print(f"Gerando relatório em {caminho_relatorio}")
+        return True
+    else: #caso não encontre nenhum só passa a mensagem que não existem pacientes
+        print(f"Não existem consultas cadastradas nos últimos {numero_dias} dias.")
+        return False
+
 
 #############################################################################################
 #### Funções de arquivo =====================================================================
 #############################################################################################
-#--------------------------------------------------------------------------------------------
 def arquivo_existe(nome_arquivo):
-    import os
-    return os.path.isfile(nome_arquivo) #retorna True se o arquivo existir e False se não existir. Além de verificar o caminho, isfile() verifica se é um arquivo legítimo e não um diretório ou link. O método .exists() só verifica se o caminho existe, mas pode ser um diretório ou link. Ele não confirma se é um arquivo.
+    return os.path.isfile(nome_arquivo) 
 
 #--------------------------------------------------------------------------------------------
 def criar_arquivo(caminho_arquivo):
@@ -822,8 +1012,8 @@ def criar_arquivo(caminho_arquivo):
     arquivo.close()
 
 #--------------------------------------------------------------------------------------------
-def pegar_dados_do_arquivo_medicina(dicionario):
-    arquivo_medicina = open('./profissionais_medicina.txt', 'r')
+def pegar_dados_do_arquivo_medicina(dicionario, caminho_arquivo):
+    arquivo_medicina = open(caminho_arquivo, 'r')
 
     for linha in arquivo_medicina:
         linha = linha.strip() 
@@ -843,13 +1033,13 @@ def pegar_dados_do_arquivo_medicina(dicionario):
 
 
 #--------------------------------------------------------------------------------------------
-def pegar_dados_do_arquivo_pacientes(dicionario):
-    arquivo_paciente=open('./pacientes.txt','r')
+def pegar_dados_do_arquivo_pacientes(dicionario, caminho_arquivo):
+    arquivo_paciente = open(caminho_arquivo, 'r')
 
     for linha in arquivo_paciente:
         linha = linha.strip()
 
-        chave,valor = linha.split(":", 1)
+        chave,valor = linha.split(": ", 1)
 
         elementos_do_valor = valor.split(", ")
 
@@ -864,8 +1054,8 @@ def pegar_dados_do_arquivo_pacientes(dicionario):
     arquivo_paciente.close()
 
 #--------------------------------------------------------------------------------------------
-def pegar_dados_do_arquivo_consultas(dicionario):
-    arquivo_consultas = open('./consultas.txt', 'r')
+def pegar_dados_do_arquivo_consultas(dicionario, caminho_arquivo):
+    arquivo_consultas = open(caminho_arquivo, 'r')
 
     for linha in arquivo_consultas:
         linha = linha.strip() 
@@ -925,7 +1115,7 @@ def main():
     Medicina = {}
     caminho_arquivo_medicina = './profissionais_medicina.txt'
     Pacientes = {}
-    caminho_arquivo_pacientes = "./pacientes.txt"
+    caminho_arquivo_pacientes = './pacientes.txt'
     Consultas = {}
     caminho_arquivo_consultas = './consultas.txt'
 
@@ -934,7 +1124,7 @@ def main():
         opcao_menu = menu_principal()
 
         #inicializa opção para submenus opcao_submenu
-        opcao_submenu = 1 
+        opcao_submenu = 0 
         if opcao_menu == 1:
 
             # Se o arquivo não existir, cria um arquivo
@@ -1151,9 +1341,9 @@ def main():
             if not arquivo_existe(caminho_arquivo_pacientes):
                 criar_arquivo(caminho_arquivo_pacientes)
 
-            pegar_dados_do_arquivo_medicina(Medicina)
-            pegar_dados_do_arquivo_pacientes(Pacientes)
-            pegar_dados_do_arquivo_consultas(Consultas)
+            pegar_dados_do_arquivo_medicina(Medicina, caminho_arquivo_medicina)
+            pegar_dados_do_arquivo_pacientes(Pacientes, caminho_arquivo_pacientes)
+            pegar_dados_do_arquivo_consultas(Consultas, caminho_arquivo_consultas)
 
 
             # enquanto opcao_submenu não indicar retorno ao menu principal(6) ou encerrar(7), repete o submenu de medicina
@@ -1271,7 +1461,81 @@ def main():
                     opcao_menu = 5
             
         elif opcao_menu == 4:
-            print(submenu_relatorios()) # TESTE
+
+            if not arquivo_existe(caminho_arquivo_consultas):
+                criar_arquivo(caminho_arquivo_consultas)
+            
+            if not arquivo_existe(caminho_arquivo_medicina):
+                criar_arquivo(caminho_arquivo_medicina)
+            
+            if not arquivo_existe(caminho_arquivo_pacientes):
+                criar_arquivo(caminho_arquivo_pacientes)
+
+            pegar_dados_do_arquivo_medicina(Medicina, caminho_arquivo_medicina)
+            pegar_dados_do_arquivo_pacientes(Pacientes, caminho_arquivo_pacientes)
+            pegar_dados_do_arquivo_consultas(Consultas, caminho_arquivo_consultas)
+
+            while opcao_submenu != 4 and opcao_submenu != 5:
+                opcao_submenu = submenu_relatorios()
+
+                if opcao_submenu == 1:
+                    print("******** Gerar relatório de profissionais por especialidade ********")
+                    especialidade = input("Digite a especialidade para gerar relatório: ")
+
+                    if gerar_relatorio_medicos_por_especialidade(Medicina, especialidade):
+                        print(f"\n-----------------------------")
+                        print("Relatório gerado com sucesso.")
+                        print("-----------------------------")
+                    else:
+                        print(f"\n---------------------------")
+                        print("O relatório não foi gerado.")
+                        print("---------------------------")
+
+                elif opcao_submenu == 2:
+                    print("******** Gerar relatório de pacientes por idade ********")
+                    idade_maxima = ""
+                    while not isinstance(idade_maxima, int):
+                        idade_maxima = input("Digite uma idade máxima válida para gerar um relatório: ")
+                        if idade_maxima.isdigit():
+                            idade_maxima = int(idade_maxima)
+                        else:
+                            print("Somente número inteiro maior que zero.")
+                    
+                    if gerar_relatorio_paciente_por_idade(Pacientes, idade_maxima):
+                        print(f"\n-----------------------------")
+                        print("Relatório gerado com sucesso.")
+                        print("-----------------------------")
+                    else:
+                        print(f"\n---------------------------")
+                        print("O relatório não foi gerado.")
+                        print("---------------------------")
+                    
+                elif opcao_submenu == 3:
+                    print("******** Gerar relatório de Consultas dos últimos dias ********")
+                    numero_dias = ""
+                    while not isinstance(numero_dias, int):
+                        numero_dias = input("Digite um número de dias válido para buscar as consultas: ")
+                        if numero_dias.isdigit():
+                            numero_dias = int(numero_dias)
+                        else:
+                            print("Somente número inteiro maior que zero.")
+                    if gerar_relatorio_consultas_ultimos_dias(Consultas, Medicina, Pacientes, numero_dias):
+                        print(f"\n-----------------------------")
+                        print("Relatório gerado com sucesso.")
+                        print("-----------------------------")
+                    else:
+                        print(f"\n---------------------------")
+                        print("O relatório não foi gerado.")
+                        print("---------------------------")
+                
+                elif opcao_submenu == 4:
+                    print()
+                    print("Retornando ao menu principal...") # FUNCIONANDO
+
+                elif opcao_submenu == 5:
+                    msg_encerrado()
+                    opcao_menu = 5
+
         elif opcao_menu == 5:
             msg_encerrado()
 
