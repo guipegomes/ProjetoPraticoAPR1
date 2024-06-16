@@ -1,2 +1,0 @@
-('CRM002', 'CPF001', '10-06-2024', '02:00'): Enxaqueca, [Neosaldina 50mg], [8h/8h]
-('CRM001', 'CPF001', '03-03-2024', '03:00'): Hipertensão, [Losartana 50mg], [1x dia]

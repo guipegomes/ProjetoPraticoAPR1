@@ -33,7 +33,7 @@ def chave_existe_no_dicionario(dicionario, chave): # chave vem como crm, cpf ou 
         return False
 
 #--------------------------------------------------------------------------------------------
-def criar_tupla_chaves():
+def criar_tupla_chaves(): # função é chamada cada vez que é necessário pedir essas informações ao usuário
     crm = input("Digite o CRM do profissional: ")
     cpf = input("Digite o CPF do paciente (Somente números): ")
     data_da_consulta = input("Digite a data da consulta (DD-MM-AAAA): ")
@@ -42,7 +42,7 @@ def criar_tupla_chaves():
     return tupla_chaves
 
 #--------------------------------------------------------------------------------------------
-def adicionar_email(lista): 
+def adicionar_email(lista):  # recebe lista de e-mails e adiciona mais e-mails
         email = "0"
         print("Iniciada repetição para adicionar e-mails.")
         while email != "":
@@ -56,7 +56,7 @@ def adicionar_email(lista):
                     print()
 
 #--------------------------------------------------------------------------------------------
-def adicionar_telefone(lista): 
+def adicionar_telefone(lista): # recebe lista de telefones e adiciona mais telefones à ela, não permite lista vazia
         telefone = "0"
         print("Iniciada repetição para adicionar telefones (Formato (00)00000-0000)")
         while telefone != "":
@@ -71,9 +71,9 @@ def adicionar_telefone(lista):
                     telefone = "0"
 
 #--------------------------------------------------------------------------------------------
-def adicionar_medicamentos_e_posologias(lista_medicamentos, lista_posologias):
-    medicamento = "vazio"
-    posologia = "vazio"
+def adicionar_medicamentos_e_posologias(lista_medicamentos, lista_posologias): 
+    medicamento = "0"
+    posologia = "0"
     while medicamento != "":
         medicamento = input("Digite um medicamento indicado (Formato: Losartana 50mg) (ou pressione Enter para terminar): ")
         if medicamento == "" and len(lista_medicamentos) == 0:
@@ -1133,7 +1133,7 @@ def main():
                 criar_arquivo(caminho_arquivo_medicina)
 
             # Coloca no dicionario medicina os dados do arquivo de texto
-            pegar_dados_do_arquivo_medicina(Medicina)
+            pegar_dados_do_arquivo_medicina(Medicina, caminho_arquivo_medicina)
 
             # enquanto opcao_submenu não indicar retorno ao menu principal(6) ou encerrar(7), repete o submenu de medicina
             while opcao_submenu!=6 and opcao_submenu!=7:
@@ -1238,7 +1238,7 @@ def main():
             if not arquivo_existe(caminho_arquivo_pacientes):
                 criar_arquivo(caminho_arquivo_pacientes)
             
-            pegar_dados_do_arquivo_pacientes(Pacientes)
+            pegar_dados_do_arquivo_pacientes(Pacientes, caminho_arquivo_pacientes)
 
             while opcao_submenu!=6 and opcao_submenu!=7:
                 opcao_submenu=submenu_pacientes()

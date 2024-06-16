@@ -1,2 +1,0 @@
-CRM001: Lucas Silva, 12-10-1995, Masculino, Cardiologista, UFSCar, [lucas.s@gmail.com; dr.lucas.silva@medicina.com], [(16)9999-9999]
-CRM002: Maria Antonieta, 10-12-1996, Feminino, Respirologista, USP, [mari.antonieta@gmail.com], [(19)8888-8888]
