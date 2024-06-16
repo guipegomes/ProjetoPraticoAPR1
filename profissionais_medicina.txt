@@ -1,0 +1,5 @@
+CRM/SP 111111: Luís Antônio Inácio, 16-02-1975, Masculino, Cardiologia, USP, [], [(11)1111-1111]
+CRM/SP 222222: Maria Antonietta Silvestre, 02-05-1965, Feminino, Dermatologia, UFSCar, [dra.antonietta@medica.com], [(22)2222-2222]
+CRM/RJ 333333: Renato Pascoal, 22-10-1993, Masculino, Cardiologia, UFRJ, [repascoal@pessoal.com; dr.pascoal@medico.com], [(33)3333-3333]
+CRM/SC 444444: Luísa Perdigonni, 26-03-1998, Feminino, Neurologia, UFSC, [dra.perdigonni@medica.com], [(44)4444-4444]
+CRM/SP 555555: Cris Sakamoto, 19-11-1997, Não-binário, Dermatologia, UFSCar, [sakamoto.cris@pessoal.com; dre.sakamoto@medicina.com], [(55)5555-5555]

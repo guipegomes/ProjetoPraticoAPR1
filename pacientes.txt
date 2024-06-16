@@ -1,0 +1,5 @@
+111111: Umbra Selenia, 12-10-2008, Feminino, Unimed, [umbral@pessoal.com], [(99)9999-9999]
+222222: Josailton Péricles, 08-01-1959, Masculino, SUS, [], [(88)8888-8888]
+333333: Carla Perez, 16-11-1977, Feminino, São Francisco, [segura.o@tchan.com; amarra.o@tchan.com], [(77)7777-7777]
+444444: Scheila Carvalho, 24-09-1973, Feminino, Unimed, [morena.do@tchan.com], [(66)6666-6666]
+555555: Durval Sorensen, 15-06-1945, Masculino, SUS, [], [(12)3456-7890]

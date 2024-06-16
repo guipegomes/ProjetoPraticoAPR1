@@ -1,0 +1,5 @@
+('CRM/SP 111111', '111111', '10-06-2024', '10h00'): Hipertensão, [Losartana 50mg], [1x dia]
+('CRM/SC 444444', '333333', '28-05-2024', '14h30'): Enxaqueca crônica, [Topiramato 25mg], [1x dia]
+('CRM/SP 555555', '444444', '15-06-2024', '9h30'): Dermatite Atópica, [Hidrocortisona 1% Creme], [2x dia (manhã e noite)]
+('CRM/SP 222222', '111111', '14-06-2024', '16h00'): Acne Vulgar, [Perióxido de Benzoíla 5% Gel; Protetor Solar fator 60], [1x dia (manhã); Aplicar conforme necessário]
+('CRM/RJ 333333', '555555', '10-01-2024', '8h00'): Insuficiência Cardíaca, [Furosemida 40mg], [1x dia]
