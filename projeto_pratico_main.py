@@ -1,3 +1,7 @@
+#                                  Projeto Prático de APR1                                  #
+#           Alunos: Guilherme Perez Gomes - SC3044653
+
+
 #### Importações ============================================================================
 import os
 import datetime
@@ -489,7 +493,7 @@ def cadastrar_paciente(dicionario,caminho_arquivo):
         paciente.append(telefones) 
 
         # Passa para o CPF certo as informações do paciente criado aqui
-        dicionario = paciente 
+        dicionario[cpf] = paciente 
         return salvar_dicionario_no_arquivo(dicionario, caminho_arquivo)
         
 #--------------------------------------------------------------------------------------------
