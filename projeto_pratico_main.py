@@ -1,14 +1,19 @@
+#############################################################################################
 #                                  Projeto Prático de APR1                                  #
-#           Alunos: Guilherme Perez Gomes - SC3044653
-
+#           Alunos: SC3044653: Guilherme Perez Gomes                                        #
+#                   SC3045668: Stephanie Marys                                              #
+#                                                                                           #
+#           Professora: Eloize                                                              #
+#############################################################################################
 
 #### Importações ============================================================================
 import os
 import datetime
+
 #############################################################################################
 #### Repetições =============================================================================
 #############################################################################################
-def verifica_escolha_do_usuario(numero_de_opcoes): # max é o número de escolhas dos menus
+def verifica_escolha_do_usuario(numero_de_opcoes): # numero_de_opcoes vem de cada menu com o numero maximo de opcoes que aquele menu tem
     while True: 
         entrada = input("Digite a opção escolhida: ")
         
@@ -47,7 +52,7 @@ def criar_tupla_chaves(): # função é chamada cada vez que é necessário pedi
 
 #--------------------------------------------------------------------------------------------
 def adicionar_email(lista):  # recebe lista de e-mails e adiciona mais e-mails
-        email = "0"
+        email = "entrada loop"
         print("Iniciada repetição para adicionar e-mails.")
         while email != "":
             email = input(f"\tDigite um e-mail (ou pressione Enter para terminar): ")
@@ -61,7 +66,7 @@ def adicionar_email(lista):  # recebe lista de e-mails e adiciona mais e-mails
 
 #--------------------------------------------------------------------------------------------
 def adicionar_telefone(lista): # recebe lista de telefones e adiciona mais telefones à ela, não permite lista vazia
-        telefone = "0"
+        telefone = "entrada loop"
         print("Iniciada repetição para adicionar telefones (Formato (00)00000-0000)")
         while telefone != "":
             telefone = input("Digite um telefone (ou pressione Enter para terminar): ")
@@ -72,27 +77,31 @@ def adicionar_telefone(lista): # recebe lista de telefones e adiciona mais telef
                     print()
                     print("Atenção! É obrigatório ao menos 1(um) telefone para contato.")
                     print()
-                    telefone = "0"
+                    telefone = "continua loop"
 
 #--------------------------------------------------------------------------------------------
 def adicionar_medicamentos_e_posologias(lista_medicamentos, lista_posologias): 
-    medicamento = "0"
-    posologia = "0"
+    medicamento = "entrada loop"
+    posologia = "entrada verificação"
     while medicamento != "":
         medicamento = input("Digite um medicamento indicado (Formato: Losartana 50mg) (ou pressione Enter para terminar): ")
         if medicamento == "" and len(lista_medicamentos) == 0:
             print()
             print(f"Atenção! É necessário acrescentar um medicamento.")
             print()
+            medicamento = "continua loop"
         else:
             if medicamento != "":
                 lista_medicamentos.append(medicamento)
-                posologia = input(f"Digite a posologia para {medicamento} (Formatos: 1x dia; 8h/8h): ")
-                if posologia == "" and medicamento != "":
-                    print()
-                    print(f"Atenção! É necessário acrescentar uma posologia ao medicamento {medicamento}.")
-                else:
-                    lista_posologias.append(posologia)
+
+                while posologia != "adicionada":
+                    posologia = input(f"Digite a posologia para {medicamento} (Formatos: 1x dia; 8h/8h): ")
+                    if posologia == "" and medicamento != "":
+                        print()
+                        print(f"Atenção! É necessário acrescentar uma posologia ao medicamento {medicamento}.")
+                    else:
+                        lista_posologias.append(posologia)
+                        posologia = "adicionada"
 
 #--------------------------------------------------------------------------------------------
 def alterar_emails(dicionario, chave): # chave pode ser crm ou cpf
@@ -492,7 +501,6 @@ def cadastrar_paciente(dicionario,caminho_arquivo):
         adicionar_telefone(telefones)
         paciente.append(telefones) 
 
-        # Passa para o CPF certo as informações do paciente criado aqui
         dicionario[cpf] = paciente 
         return salvar_dicionario_no_arquivo(dicionario, caminho_arquivo)
         
